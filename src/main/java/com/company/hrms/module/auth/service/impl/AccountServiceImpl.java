@@ -100,7 +100,7 @@ public class AccountServiceImpl implements AccountService {
     private UserResponse mapToUserResponse(User user) {
         return UserResponse.builder()
                 .userId(user.getUserId())
-                .username(user.getUsername())
+                .username(user.getActualUsername())
                 .email(user.getEmail())
                 .role(user.getRole().getRoleName())
                 .status(user.getStatus())

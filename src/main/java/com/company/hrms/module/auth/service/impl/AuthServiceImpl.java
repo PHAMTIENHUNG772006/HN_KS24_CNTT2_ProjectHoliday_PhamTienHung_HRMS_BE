@@ -56,7 +56,7 @@ public class AuthServiceImpl implements AuthService {
                     .token(token)
                     .refreshToken(refreshToken.getToken())
                     .userId(user.getUserId())
-                    .username(user.getUsername())
+                    .username(user.getActualUsername())
                     .email(user.getEmail())
                     .role(user.getRole().getRoleName())
                     .isTemporaryPassword(user.getIsTemporaryPassword())
@@ -85,7 +85,7 @@ public class AuthServiceImpl implements AuthService {
         user.setEmail(request.getEmail());
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         user.setRole(role);
-        user.setStatus("PENDING_APPROVAL");
+        user.setStatus("ACTIVE");
         user.setIsTemporaryPassword(false);
 
         User savedUser = userRepository.save(user);
@@ -98,7 +98,7 @@ public class AuthServiceImpl implements AuthService {
                 .token(token)
                 .refreshToken(refreshToken.getToken())
                 .userId(savedUser.getUserId())
-                .username(savedUser.getUsername())
+                .username(savedUser.getActualUsername())
                 .email(savedUser.getEmail())
                 .role(role.getRoleName())
                 .isTemporaryPassword(false)

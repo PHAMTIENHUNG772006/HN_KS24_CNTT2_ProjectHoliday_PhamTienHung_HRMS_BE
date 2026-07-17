@@ -96,4 +96,8 @@ public class User extends BaseEntity implements UserDetails {
     public boolean isEnabled() {
         return "ACTIVE".equals(status);
     }
+
+    public String getActualUsername() {
+        return this.username;
+    }
 }

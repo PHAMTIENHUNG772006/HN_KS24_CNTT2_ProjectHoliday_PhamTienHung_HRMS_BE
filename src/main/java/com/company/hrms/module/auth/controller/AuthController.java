@@ -72,7 +72,7 @@ public class AuthController {
                                     .accessToken(token)
                                     .refreshToken(requestRefreshToken)
                                     .userId(user.getUserId())
-                                    .username(user.getUsername())
+                                    .username(user.getActualUsername())
                                     .email(user.getEmail())
                                     .role(user.getRole().getRoleName())
                                     .build())
