@@ -53,6 +53,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     @Transactional
     public EmployeeResponse createEmployee(EmployeeRequest request) {
+        if (request.getIdCardNumber() != null) {
+            String cccdStr = String.valueOf(request.getIdCardNumber());
+            if (cccdStr.length() != 12) {
+                throw new AppException("Số CCCD (Căn cước công dân) phải bao gồm đúng 12 chữ số", HttpStatus.BAD_REQUEST);
+            }
+        }
+
         if (employeeRepository.existsByIdCardNumber(request.getIdCardNumber())) {
             throw new AppException("Số CCCD đã tồn tại trong hệ thống", HttpStatus.CONFLICT);
         }
@@ -68,6 +75,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeResponse updateEmployee(Long id, EmployeeRequest request) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new AppException("Không tìm thấy nhân viên", HttpStatus.NOT_FOUND));
+
+        if (request.getIdCardNumber() != null) {
+            String cccdStr = String.valueOf(request.getIdCardNumber());
+            if (cccdStr.length() != 12) {
+                throw new AppException("Số CCCD (Căn cước công dân) phải bao gồm đúng 12 chữ số", HttpStatus.BAD_REQUEST);
+            }
+        }
 
         if (!employee.getIdCardNumber().equals(request.getIdCardNumber()) && 
             employeeRepository.existsByIdCardNumber(request.getIdCardNumber())) {
