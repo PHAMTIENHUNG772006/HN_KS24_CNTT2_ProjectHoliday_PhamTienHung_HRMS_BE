@@ -1,32 +1,30 @@
 # ==========================================
-# Stage 1: Build JAR file
+# Stage 1: Build JAR bằng Java 21 JDK
 # ==========================================
-FROM eclipse-temurin:17-jdk-alpine AS build
+FROM eclipse-temurin:21-jdk-alpine AS build
 
 WORKDIR /app
 
-# Copy toàn bộ source code và cấu hình vào container
+# Copy toàn bộ code và cấu hình
 COPY . .
 
-# Fix lỗi ký tự xuống dòng Windows (CRLF) và cấp quyền thực thi cho gradlew
+# Fix ký tự xuống dòng Windows và cấp quyền thực thi cho gradlew
 RUN sed -i 's/\r$//' gradlew && chmod +x gradlew
 
-# Build JAR bỏ qua test, tắt daemon và giới hạn RAM để tránh tràn bộ nhớ gói Free
+# Build JAR bỏ qua test, giới hạn RAM để tránh crash trên Render gói Free
 ENV GRADLE_OPTS="-Dorg.gradle.jvmargs=-Xmx256m -Dorg.gradle.daemon=false"
-RUN ./gradlew bootJar -x test --no-daemon --stacktrace
+RUN ./gradlew bootJar -x test --no-daemon
 
 # ==========================================
-# Stage 2: Chạy ứng dụng nhẹ gọn (JRE)
+# Stage 2: Chạy ứng dụng bằng Java 21 JRE
 # ==========================================
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
 
-# Copy file jar được tạo ra từ stage build
+# Copy file jar từ stage build
 COPY --from=build /app/build/libs/*.jar app.jar
 
-# Render tự động gán biến PORT (mặc định là 10000 hoặc theo cấu hình của bạn)
 EXPOSE 8080
 
-# Chạy ứng dụng Spring Boot
 ENTRYPOINT ["java", "-jar", "app.jar"]
