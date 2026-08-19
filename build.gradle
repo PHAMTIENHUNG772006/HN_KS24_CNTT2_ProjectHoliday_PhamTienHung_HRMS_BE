@@ -33,11 +33,12 @@ dependencies {
     // Cloudinary
     implementation 'com.cloudinary:cloudinary-http44:1.37.0'
 
-    // Chỉ định rõ version cho Lombok vì BOM platform đôi khi không tự nạp version cho annotationProcessor
+    // Lombok
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
 
-    runtimeOnly 'com.mysql:mysql-connector-j'
+    // PostgreSQL Driver
+    implementation 'org.postgresql:postgresql:42.7.3'
 
     // JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
